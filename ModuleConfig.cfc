@@ -1,16 +1,19 @@
   component {
 
-    this.name = "cbbolt";
+    this.name = "cbWire";
     this.version = "1.0.0";
     this.author = "Grant Copley";
-    this.webUrl = "https://github.com/grantcopley/cbbolt";
+    this.webUrl = "https://github.com/grantcopley/cbWire";
     this.dependencies = [];
+    this.entryPoint = "/livewire";
 
     function configure() {
         settings = {
-            "registerInterceptor": true,
-            "registerHelper": true,
-            "regsiterControllerMethods": true,
+            "register": {
+                "interceptor": true,
+                "helper": true,
+                "controllerMethods": true
+            },
             "defaultViewArgs": { "view": "main/index", "module": "cbbolt" },
             "version": function() {
                 return "";
@@ -19,22 +22,22 @@
     }
 
     function onLoad() {
-        if ( settings.registerInterceptor ) {
+        if ( settings.register.interceptor ) {
             controller
                 .getInterceptorService()
                 .registerInterceptor(
-                    interceptorName = "BoltLifecycleInterceptor",
+                    interceptorName = "LivewireLifecycleInterceptor",
                     interceptorClass = "#moduleMapping#.interceptors.BoltLifecycle"
                 );
         }
 
-        if ( settings.registerHelper ) {
+        if ( settings.register.helper ) {
             var helpers = controller.getSetting( "applicationHelper" );
-            arrayAppend( helpers, "#moduleMapping#/helpers/Bolt.cfm" );
+            arrayAppend( helpers, "#moduleMapping#/helpers/Livewire.cfm" );
             controller.setSetting( "applicationHelper", helpers );
         }
 
-        if ( settings.regsiterControllerMethods ) {
+        if ( settings.register.controllerMethods ) {
             if (
                 controller.getSetting(
                     name = "controllerDecorator",
@@ -54,22 +57,22 @@
     }
 
     function onUnload() {
-        if ( settings.registerHelper ) {
+        if ( settings.register.helper ) {
             controller.setSetting(
                 "applicationHelper",
                 arrayFilter( controller.getSetting( "applicationHelper" ), function( helper ) {
-                    return helper != "#moduleMapping#/helpers/Bolt.cfm";
+                    return helper != "#moduleMapping#/helpers/Livewire.cfm";
                 } )
             );
         }
 
-        if ( settings.registerInterceptor ) {
+        if ( settings.register.interceptor ) {
             controller
                 .getInterceptorService()
-                .unregister( interceptorName = "BoltLifecycleInterceptor" );
+                .unregister( interceptorName = "LivewireLifecycleInterceptor" );
         }
 
-        if ( settings.regsiterControllerMethods ) {
+        if ( settings.register.controllerMethods ) {
             controller.setSetting( "controllerDecorator", "" );
         }
     }
