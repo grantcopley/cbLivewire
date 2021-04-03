@@ -1,5 +1,7 @@
 component {
 
+    property name="wirebox" inject="wirebox";
+
     /**
     * Returns the styles to be placed in HTML head
     */
@@ -18,8 +20,8 @@ component {
     * Renders a livewire component
     */
     function render( componentName ) {
-        var renderer = wirebox.getInstance( "Renderer@coldbox" );
-        return renderer.renderView( "cblivewire/#componentName#" );
+        var livewireComponent = wirebox.getInstance( componentName );
+        return livewireComponent.render();
     }
 
 }
